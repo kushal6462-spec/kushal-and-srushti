@@ -141,6 +141,7 @@ export function IllustratedInvite() {
       copyTop: '29%',
       copyLeft: '12%',
       copyRight: '12%',
+      lunch: null,
     },
     {
       id: 'vidhi',
@@ -156,6 +157,7 @@ export function IllustratedInvite() {
       copyTop: '14%',
       copyLeft: '20%',
       copyRight: '20%',
+      lunch: null,
     },
     {
       id: 'mangal',
@@ -171,6 +173,11 @@ export function IllustratedInvite() {
       copyTop: '17%',
       copyLeft: '30%',
       copyRight: '18%',
+      lunch: {
+        lead: t('invite.mangal-lunch-lead'),
+        title: t('invite.mangal-lunch-title'),
+        time: t('invite.mangal-lunch-time'),
+      },
     },
   ];
 
@@ -534,6 +541,30 @@ export function IllustratedInvite() {
                     <p className="mx-auto mt-1 max-w-[90%] text-center font-serif text-[11px] leading-tight text-[#3d2b22]">
                       {item.address}
                     </p>
+                  ) : null}
+                  {item.lunch ? (
+                    <div className="mt-2.5">
+                      <p className="font-serif text-[12px] italic leading-tight text-[#5c4033]">
+                        {item.lunch.lead}
+                      </p>
+                      <p className="mt-1 font-serif text-[14px] font-semibold tracking-wide text-[#6b2d3c]">
+                        {item.lunch.title}
+                      </p>
+                      <p className="mt-0.5 flex items-center justify-center gap-1.5 font-serif text-[12px] text-[#3d2b22]">
+                        <svg
+                          viewBox="0 0 24 24"
+                          className="h-3 w-3 shrink-0"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          aria-hidden="true"
+                        >
+                          <circle cx="12" cy="12" r="8.5" />
+                          <path d="M12 8v4.5l2.5 1.5" strokeLinecap="round" />
+                        </svg>
+                        <span>{item.lunch.time}</span>
+                      </p>
+                    </div>
                   ) : null}
                 </div>
                 )}
