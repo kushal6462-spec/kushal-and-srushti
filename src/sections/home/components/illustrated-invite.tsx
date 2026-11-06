@@ -526,7 +526,20 @@ export function IllustratedInvite() {
                     >
                       <path d="M12 2.5c-3.6 0-6.5 2.8-6.5 6.3 0 4.7 6.5 12.7 6.5 12.7s6.5-8 6.5-12.7c0-3.5-2.9-6.3-6.5-6.3zm0 8.6a2.3 2.3 0 1 1 0-4.6 2.3 2.3 0 0 1 0 4.6z" />
                     </svg>
-                    {item.venue}
+                    {eventVariant === 'wedding' && item.id !== 'haldi' ? (
+                      <a
+                        href={vidhiMap}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${item.venue} on Google Maps`}
+                        title={t('invite.venue-map-link')}
+                        className="pointer-events-auto text-inherit no-underline"
+                      >
+                        {item.venue}
+                      </a>
+                    ) : (
+                      item.venue
+                    )}
                   </p>
                   {item.address ? (
                     <p className="mx-auto mt-1 max-w-[90%] text-center font-serif text-[11px] leading-tight text-[#3d2b22]">
