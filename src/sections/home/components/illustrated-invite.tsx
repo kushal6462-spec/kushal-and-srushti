@@ -61,10 +61,12 @@ export function IllustratedInvite() {
   const searchParams = useSearchParams();
   const nameOrder = searchParams.get('names') === 'srushti' ? 'srushti' : 'kushal';
   const requestedEvent = searchParams.get('event');
+
   const eventVariant =
     requestedEvent === 'haldi' || requestedEvent === 'wedding'
       ? requestedEvent
       : 'all';
+
   const songHostRef = useRef<HTMLDivElement>(null);
   const songRef = useRef<SongPlayer | null>(null);
   const songReady = useRef(false);
@@ -98,6 +100,7 @@ export function IllustratedInvite() {
           { title: t('invite.groom-title'), name: t('invite.groom-name') },
           { title: t('invite.bride-title'), name: t('invite.bride-name') },
         ];
+
   const familyDetails =
     nameOrder === 'srushti'
       ? [
@@ -120,19 +123,24 @@ export function IllustratedInvite() {
             parents: t('invite.parents-todmal'),
           },
         ];
+
   const familiesText =
     nameOrder === 'srushti'
       ? t('invite.families-bride-first')
       : t('invite.families');
+
   const couple = `${orderedPeople[0].name} & ${orderedPeople[1].name}`;
+
   const invitationLine =
     eventVariant === 'haldi'
       ? t('invite.haldi-invite-you')
       : t('invite.invite-you');
+
   const invitationLetterBody =
     eventVariant === 'haldi'
       ? t('invite.haldi-letter-body')
       : t('invite.letter-body');
+
   const haldiMap = generateMapLink(WEDDING_CONFIG.venue.haldi.mapQuery);
   const vidhiMap = generateMapLink(WEDDING_CONFIG.venue.vidhi.mapQuery);
 
@@ -194,6 +202,7 @@ export function IllustratedInvite() {
       lines: [] as string[],
     },
   ];
+
   const visibleEvents = events.filter((item) =>
     eventVariant === 'all'
       ? true
@@ -201,6 +210,7 @@ export function IllustratedInvite() {
         ? item.id === 'haldi'
         : item.id !== 'haldi'
   );
+
   const venues = [
     {
       ...WEDDING_CONFIG.venue.haldi,
