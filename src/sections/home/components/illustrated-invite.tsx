@@ -141,9 +141,6 @@ export function IllustratedInvite() {
       copyTop: '29%',
       copyLeft: '12%',
       copyRight: '12%',
-      shades: [] as { name: string; color: string }[],
-      dress: '',
-      lines: [] as string[],
     },
     {
       id: 'vidhi',
@@ -159,10 +156,6 @@ export function IllustratedInvite() {
       copyTop: '14%',
       copyLeft: '20%',
       copyRight: '20%',
-      shades: [],
-      dressHeading: '',
-      dress: t('invite.vidhi-dress'),
-      lines: [] as string[],
     },
     {
       id: 'mangal',
@@ -178,10 +171,6 @@ export function IllustratedInvite() {
       copyTop: '17%',
       copyLeft: '30%',
       copyRight: '18%',
-      shades: [],
-      dressHeading: t('invite.mangal-dress'),
-      dress: '',
-      lines: [] as string[],
     },
   ];
 
@@ -544,39 +533,6 @@ export function IllustratedInvite() {
                   {item.address ? (
                     <p className="mx-auto mt-1 max-w-[90%] text-center font-serif text-[11px] leading-tight text-[#3d2b22]">
                       {item.address}
-                    </p>
-                  ) : null}
-                  <p className="mt-1.5 font-serif text-[15px] capitalize text-[#3d2b22]">
-                    {item.dressHeading || t('invite.dress')}
-                  </p>
-                  {item.shades.length > 0 ? (
-                    <div className="mx-auto mt-1.5 grid max-w-[15rem] grid-cols-5 gap-1.5">
-                      {item.shades.map((shade) => (
-                        <div key={shade.name}>
-                          <div
-                            className="h-6 rounded-full border border-[#c4a574] shadow-sm"
-                            style={{ backgroundColor: shade.color }}
-                          />
-                          <p className="mt-1 text-center font-serif text-[11px] leading-tight text-[#5c4033]">
-                            {shade.name}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  ) : item.lines.length > 0 ? (
-                    <div className="mt-1 space-y-0.5">
-                      {item.lines.map((line) => (
-                        <p
-                          key={line}
-                          className="font-serif text-[13px] leading-snug text-[#3d2b22]"
-                        >
-                          {line}
-                        </p>
-                      ))}
-                    </div>
-                  ) : item.dress ? (
-                    <p className="mt-1 font-serif text-[13px] leading-snug text-[#3d2b22]">
-                      {item.dress}
                     </p>
                   ) : null}
                 </div>
