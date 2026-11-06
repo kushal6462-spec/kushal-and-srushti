@@ -10,7 +10,6 @@ export const WEDDING_CONFIG = {
     title: 'Love',
     youtubeId: 'kUUOlB_L2sA',
   },
-  rsvpUrl: process.env.NEXT_PUBLIC_RSVP_URL || '',
   art: {
     cover: asset('/assets/theme/cover-sky.jpg'),
     paper: asset('/assets/theme/paper.jpg'),

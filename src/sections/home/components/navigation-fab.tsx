@@ -12,7 +12,6 @@ const sections = [
   'couple',
   'details',
   'venue',
-  'rsvp',
 ];
 
 export default function NavigationFAB({

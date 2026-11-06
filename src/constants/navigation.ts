@@ -58,10 +58,4 @@ export const NAVIGATION_SECTIONS = [
     icon: '📍',
     gradient: 'from-indigo-500 to-blue-500',
   },
-  {
-    id: 'rsvp',
-    labelKey: 'navigation.rsvp',
-    icon: '✉️',
-    gradient: 'from-cyan-500 to-teal-500',
-  },
 ];

@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useEffect, useRef, useState, type FormEvent } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { WEDDING_CONFIG } from '@/constants';
@@ -24,9 +24,6 @@ const EVENT_PETALS = [
   { left: '68%', delay: '1.1s', duration: '7.6s', size: 17, sway: '20px' },
   { left: '84%', delay: '3.2s', duration: '6.2s', size: 14, sway: '-16px' },
 ];
-
-const inputClass =
-  'w-full rounded-xl border border-[#e2d0b4] bg-white/80 px-3 py-2.5 text-base text-[#3d2b22] outline-none focus:border-[#b8894a]';
 
 type SongPlayer = {
   playVideo: () => void;
@@ -73,22 +70,7 @@ export function IllustratedInvite() {
   const wantSong = useRef(false);
   const started = useRef(false);
   const [playing, setPlaying] = useState(false);
-  const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState(false);
-  const [error, setError] = useState('');
   const [shift, setShift] = useState(0);
-
-  const [form, setForm] = useState({
-    name: '',
-    phone: '',
-    attendance: '',
-    extraGuests: '',
-    arrivalDate: '',
-    arrivalTime: '',
-    departureDate: '',
-    departureTime: '',
-    message: '',
-  });
 
   const orderedPeople =
     nameOrder === 'srushti'
@@ -339,38 +321,6 @@ export function IllustratedInvite() {
     started.current = true;
     songRef.current.playVideo();
     setPlaying(true);
-  };
-
-  const onSubmit = async (event: FormEvent) => {
-    event.preventDefault();
-    setError('');
-
-    const url = WEDDING_CONFIG.rsvpUrl;
-
-    if (!url) {
-      setError(t('invite.sheet-waiting'));
-
-      return;
-    }
-
-    setSending(true);
-
-    try {
-      await fetch(url, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({
-          ...form,
-          submittedAt: new Date().toISOString(),
-        }),
-      });
-      setSent(true);
-    } catch {
-      setError(t('invite.send-failed'));
-    } finally {
-      setSending(false);
-    }
   };
 
   return (
@@ -664,153 +614,6 @@ export function IllustratedInvite() {
               </div>
             </>
           ) : null}
-        </section>
-
-        <section className="px-6 pb-14">
-          <p className="text-center text-[11px] uppercase tracking-[0.28em] text-[#a68456]">
-            {t('invite.rsvp-kicker')}
-          </p>
-          <h2 className="mt-2 text-center font-serif text-4xl text-[#3d2b22]">
-            {t('invite.rsvp-title')}
-          </h2>
-          {sent ? (
-            <p className="mt-8 text-center font-serif text-xl italic text-[#6b2d3c]">
-              {t('invite.thanks')}
-            </p>
-          ) : (
-            <form onSubmit={onSubmit} className="mt-6 space-y-4">
-              <label className="block text-sm text-[#5c463c]">
-                {t('invite.name')}
-                <input
-                  required
-                  name="name"
-                  maxLength={150}
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className={`${inputClass} mt-1`}
-                />
-              </label>
-              <label className="block text-sm text-[#5c463c]">
-                {t('invite.phone')}
-                <input
-                  required
-                  type="tel"
-                  name="phone"
-                  autoComplete="tel"
-                  maxLength={32}
-                  value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  className={`${inputClass} mt-1`}
-                />
-              </label>
-              <label className="block text-sm text-[#5c463c]">
-                {t('invite.attending')}
-                <select
-                  required
-                  name="attendance"
-                  value={form.attendance}
-                  onChange={(e) =>
-                    setForm({ ...form, attendance: e.target.value })
-                  }
-                  className={`${inputClass} mt-1`}
-                >
-                  <option value="">{t('invite.choose')}</option>
-                  <option value="yes">{t('invite.yes')}</option>
-                  <option value="no">{t('invite.no')}</option>
-                </select>
-              </label>
-              <label className="block text-sm text-[#5c463c]">
-                {t('invite.guest-count')}
-                <input
-                  type="number"
-                  min={0}
-                  max={20}
-                  step={1}
-                  name="extraGuests"
-                  value={form.extraGuests}
-                  onChange={(e) =>
-                    setForm({ ...form, extraGuests: e.target.value })
-                  }
-                  className={`${inputClass} mt-1`}
-                />
-              </label>
-              <div className="grid grid-cols-2 gap-3">
-                <label className="block text-sm text-[#5c463c]">
-                  {t('invite.arrival-date')}
-                  <input
-                    type="date"
-                    name="arrivalDate"
-                    value={form.arrivalDate}
-                    onChange={(e) =>
-                      setForm({ ...form, arrivalDate: e.target.value })
-                    }
-                    className={`${inputClass} mt-1`}
-                  />
-                </label>
-                <label className="block text-sm text-[#5c463c]">
-                  {t('invite.arrival-time')}
-                  <input
-                    type="time"
-                    name="arrivalTime"
-                    value={form.arrivalTime}
-                    onChange={(e) =>
-                      setForm({ ...form, arrivalTime: e.target.value })
-                    }
-                    className={`${inputClass} mt-1`}
-                  />
-                </label>
-                <label className="block text-sm text-[#5c463c]">
-                  {t('invite.departure-date')}
-                  <input
-                    type="date"
-                    name="departureDate"
-                    value={form.departureDate}
-                    onChange={(e) =>
-                      setForm({ ...form, departureDate: e.target.value })
-                    }
-                    className={`${inputClass} mt-1`}
-                  />
-                </label>
-                <label className="block text-sm text-[#5c463c]">
-                  {t('invite.departure-time')}
-                  <input
-                    type="time"
-                    name="departureTime"
-                    value={form.departureTime}
-                    onChange={(e) =>
-                      setForm({ ...form, departureTime: e.target.value })
-                    }
-                    className={`${inputClass} mt-1`}
-                  />
-                </label>
-              </div>
-              <label className="block text-sm text-[#5c463c]">
-                {t('invite.message')}
-                <textarea
-                  name="message"
-                  maxLength={2000}
-                  rows={3}
-                  value={form.message}
-                  onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  placeholder={t('invite.message-placeholder')}
-                  className={`${inputClass} mt-1 resize-y`}
-                />
-              </label>
-              {error ? (
-                <p className="text-sm text-[#8a3030]">{error}</p>
-              ) : null}
-              <button
-                type="submit"
-                disabled={sending}
-                className="w-full rounded-full bg-[#8a4a3a] py-3 text-sm tracking-[0.14em] text-white uppercase disabled:opacity-60"
-              >
-                {sending ? t('invite.sending') : t('invite.send')}
-              </button>
-              <p className="font-serif text-base leading-relaxed text-[#5c463c]">
-                {t('invite.rsvp-note')}
-              </p>
-            </form>
-          )}
         </section>
 
           </div>
