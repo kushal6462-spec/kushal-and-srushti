@@ -97,7 +97,7 @@ export function IllustratedInvite() {
         ]
       : [
           {
-            relationship: t('invite.son-of'),
+            relationship: t('invite.son-of-first'),
             parents: t('invite.parents-thaluri'),
           },
           {
