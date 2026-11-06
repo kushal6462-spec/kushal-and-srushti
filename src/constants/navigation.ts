@@ -59,12 +59,6 @@ export const NAVIGATION_SECTIONS = [
     gradient: 'from-indigo-500 to-blue-500',
   },
   {
-    id: 'gallery',
-    labelKey: 'navigation.gallery',
-    icon: '📸',
-    gradient: 'from-blue-500 to-cyan-500',
-  },
-  {
     id: 'rsvp',
     labelKey: 'navigation.rsvp',
     icon: '✉️',

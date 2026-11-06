@@ -48,7 +48,7 @@ export const HeroSection = ({
     <div className="h-full relative overflow-hidden">
       <img
         src={couple.cover}
-        alt="Shreya and Narsimha"
+        alt="Kushal and Srushti"
         className="absolute inset-0 w-full h-full object-cover"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-rose-950/35 to-black/75" />
@@ -66,11 +66,11 @@ export const HeroSection = ({
                 {t('hero.welcome')}
               </div>
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif text-white mb-4 leading-tight drop-shadow-lg">
-                {couple.bride.name}
+                {couple.groom.name}
                 <span className="block text-rose-200 text-3xl sm:text-4xl md:text-5xl my-2">
                   &
                 </span>
-                {couple.groom.name}
+                {couple.bride.name}
               </h1>
               <div className="w-32 h-px bg-gradient-to-r from-transparent via-rose-200 to-transparent mx-auto" />
               <p className="text-rose-100 mt-4 text-sm sm:text-base md:text-lg tracking-wide">
@@ -105,14 +105,6 @@ export const HeroSection = ({
               transition={{ duration: 1, delay: 1.2 }}
               className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center"
             >
-              <motion.button
-                onClick={() => onScrollToSection('gallery')}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-gradient-to-r from-rose-500 to-pink-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-sm sm:text-base shadow-lg cursor-pointer"
-              >
-                {t('navigation.gallery')}
-              </motion.button>
               <motion.button
                 onClick={() => onScrollToSection('details')}
                 whileHover={{ scale: 1.05 }}

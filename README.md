@@ -1,6 +1,6 @@
-# Shreya & Narsimha
+# Kushal & Srushti
 
-A digital wedding invitation for Shreya and Narsimha. It opens like a letter, plays Sukh Kalale, and gathers their wedding photographs in one place.
+A digital wedding invitation for Kushal and Srushti. It opens like a letter, plays Sukh Kalale, and gathers their wedding photographs in one place.
 
 Built from the [Holymaiden/wedding-app](https://github.com/Holymaiden/wedding-app) template (MIT). The muhurtham and venue are not filled in yet. Set `dateConfirmed` to `true` and edit `src/constants/wedding.ts` when those details are ready.
 

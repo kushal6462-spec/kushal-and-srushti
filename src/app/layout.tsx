@@ -24,13 +24,13 @@ const script = Great_Vibes({
 });
 
 export const metadata: Metadata = {
-  title: 'Shreya & Narsimha',
+  title: 'Kushal & Srushti',
   description:
-    'A wedding invitation for Shreya and Narsimha, with their photographs and the song Love.',
+    'A wedding invitation for Kushal and Srushti, with their photographs and the song Love.',
   openGraph: {
-    title: 'Shreya & Narsimha',
+    title: 'Kushal & Srushti',
     description:
-      'You are invited to the wedding of Shreya and Narsimha.',
+      'You are invited to the wedding of Kushal and Srushti.',
     images: ['/assets/images/gallery/01.jpeg'],
   },
 };

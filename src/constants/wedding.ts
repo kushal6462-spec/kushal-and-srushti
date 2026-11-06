@@ -4,54 +4,48 @@ const asset = (path: string) =>
 export const WEDDING_CONFIG = {
   dateConfirmed: true,
   /** First celebration. Countdown runs to this morning. */
-  date: new Date('2026-12-18T00:00:00+05:30'),
-  weddingDate: new Date('2026-12-19T00:00:00+05:30'),
+  date: new Date('2026-11-22T00:00:00+05:30'),
+  weddingDate: new Date('2026-11-25T00:00:00+05:30'),
   song: {
     title: 'Love',
     youtubeId: 'kUUOlB_L2sA',
   },
-  /** Couple film. */
-  film: 'https://youtu.be/XdtlVIR7Csk',
-  rsvpUrl:
-    process.env.NEXT_PUBLIC_RSVP_URL ||
-    'https://script.google.com/macros/s/AKfycbxghrj1_vrVKKny98XV4GGXsPtBYpPmiEMpHaVNQMu0GFAu4OKLeMqmW9pm9x3a6oYwOA/exec',
+  rsvpUrl: process.env.NEXT_PUBLIC_RSVP_URL || '',
   art: {
     cover: asset('/assets/theme/cover-sky.jpg'),
     paper: asset('/assets/theme/paper.jpg'),
     ganpati: asset('/assets/theme/ganpati.png'),
-    haldi: asset('/assets/theme/haldi.jpg'),
+    haldi: asset('/assets/theme/Hali-updated1.png'),
     sangeet: asset('/assets/theme/sangeet.jpg'),
     vidhi: asset('/assets/theme/vidhi.jpg'),
     mangal: asset('/assets/theme/mangal-ashtak.jpg'),
   },
   cover: asset('/assets/images/gallery/01.jpeg'),
   bride: {
-    name: 'Shreya',
-    fullName: 'Shreya',
+    name: 'Srushti',
+    fullName: 'Srushti',
     photo: asset('/assets/images/gallery/01.jpeg'),
     objectPosition: '72% 38%',
   },
   groom: {
-    name: 'Narsimha',
-    fullName: 'Narsimha',
+    name: 'Kushal',
+    fullName: 'Kushal',
     photo: asset('/assets/images/gallery/01.jpeg'),
     objectPosition: '22% 34%',
   },
   venue: {
-    ceremony: {
-      name: 'Marigold Regency',
-      address: 'Shiv Road, Shirdi, Taluka Rahata, Ahmednagar 423109',
-      time: '18 December evening · Haldi & Sangeet · 19 December early morning · Wedding',
-      photo: asset('/assets/images/marigold.jpg'),
-      mapQuery: 'https://maps.app.goo.gl/YJ7bJCAx2uCp3Bgu7',
+    haldi: {
+      date: '22 November 2026',
+      name: 'Monte Verita North Annexe',
+      address: 'Gulmohar Rd, Borivali East, Mumbai, Maharashtra 400066',
+      mapQuery: 'https://maps.app.goo.gl/dRAD1DP8uZNQ2Trn6',
     },
-    reception: {
-      name: 'Hotel Sai Siddhi',
+    vidhi: {
+      date: '25 November 2026',
+      name: 'Pioneer Hall',
       address:
-        'Shirdi–Nagar Road, opposite Sai Ashram, Shirdi, Taluka Rahata, Ahmednagar 423109',
-      time: 'Stay arranged for 18 and 19 December',
-      photo: asset('/assets/images/gallery/03.jpeg'),
-      mapQuery: 'https://maps.app.goo.gl/M3RH2ye9YMattHkB7',
+        '9, St John Baptist Rd, Mount Mary, Bandra West, Mumbai, Maharashtra 400050',
+      mapQuery: 'https://maps.app.goo.gl/QWKJRzsMzqDCXadK7',
     },
   },
   gallery: [

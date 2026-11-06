@@ -16,16 +16,10 @@ export const EventSchedule = () => {
 
   const scheduleItems = [
     {
-      time: t('schedule.day-18'),
+      time: t('schedule.haldi-date'),
       event: t('schedule.haldi'),
       description: t('schedule.haldi-detail'),
       photo: photos[7].src,
-    },
-    {
-      time: t('schedule.day-18'),
-      event: t('schedule.sangeet'),
-      description: t('schedule.sangeet-detail'),
-      photo: photos[4].src,
     },
     {
       time: t('schedule.day-19'),

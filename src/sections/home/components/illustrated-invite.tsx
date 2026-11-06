@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { Fragment, useEffect, useRef, useState, type FormEvent } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { WEDDING_CONFIG } from '@/constants';
 import { generateMapLink } from '@/lib/wedding-utils';
@@ -55,25 +56,15 @@ declare global {
   }
 }
 
-function youtubeEmbed(url: string) {
-  if (!url) return '';
-
-  try {
-    const parsed = new URL(url);
-
-    const fromPath = parsed.hostname.includes('youtu.be')
-      ? parsed.pathname.replace('/', '')
-      : parsed.searchParams.get('v') || '';
-
-    return fromPath ? `https://www.youtube.com/embed/${fromPath}` : '';
-  } catch {
-    return '';
-  }
-}
-
 export function IllustratedInvite() {
   const { t } = useTranslation('home');
-  const galleryRef = useRef<HTMLDivElement>(null);
+  const searchParams = useSearchParams();
+  const nameOrder = searchParams.get('names') === 'srushti' ? 'srushti' : 'kushal';
+  const requestedEvent = searchParams.get('event');
+  const eventVariant =
+    requestedEvent === 'haldi' || requestedEvent === 'wedding'
+      ? requestedEvent
+      : 'all';
   const songHostRef = useRef<HTMLDivElement>(null);
   const songRef = useRef<SongPlayer | null>(null);
   const songReady = useRef(false);
@@ -87,24 +78,72 @@ export function IllustratedInvite() {
 
   const [form, setForm] = useState({
     name: '',
+    phone: '',
     attendance: '',
     extraGuests: '',
     arrivalDate: '',
     arrivalTime: '',
     departureDate: '',
     departureTime: '',
+    message: '',
   });
 
-  const couple = `${WEDDING_CONFIG.bride.name} & ${WEDDING_CONFIG.groom.name}`;
-  const film = youtubeEmbed(WEDDING_CONFIG.film);
-  const ceremonyMap = generateMapLink(WEDDING_CONFIG.venue.ceremony.mapQuery);
-  const stayMap = generateMapLink(WEDDING_CONFIG.venue.reception.mapQuery);
+  const orderedPeople =
+    nameOrder === 'srushti'
+      ? [
+          { title: t('invite.bride-title'), name: t('invite.bride-name') },
+          { title: t('invite.groom-title'), name: t('invite.groom-name') },
+        ]
+      : [
+          { title: t('invite.groom-title'), name: t('invite.groom-name') },
+          { title: t('invite.bride-title'), name: t('invite.bride-name') },
+        ];
+  const familyDetails =
+    nameOrder === 'srushti'
+      ? [
+          {
+            relationship: t('invite.daughter-of'),
+            parents: t('invite.parents-todmal'),
+          },
+          {
+            relationship: t('invite.son-of'),
+            parents: t('invite.parents-thaluri'),
+          },
+        ]
+      : [
+          {
+            relationship: t('invite.son-of'),
+            parents: t('invite.parents-thaluri'),
+          },
+          {
+            relationship: t('invite.daughter-of'),
+            parents: t('invite.parents-todmal'),
+          },
+        ];
+  const familiesText =
+    nameOrder === 'srushti'
+      ? t('invite.families-bride-first')
+      : t('invite.families');
+  const couple = `${orderedPeople[0].name} & ${orderedPeople[1].name}`;
+  const invitationLine =
+    eventVariant === 'haldi'
+      ? t('invite.haldi-invite-you')
+      : t('invite.invite-you');
+  const invitationLetterBody =
+    eventVariant === 'haldi'
+      ? t('invite.haldi-letter-body')
+      : t('invite.letter-body');
+  const haldiMap = generateMapLink(WEDDING_CONFIG.venue.haldi.mapQuery);
+  const vidhiMap = generateMapLink(WEDDING_CONFIG.venue.vidhi.mapQuery);
 
   const events = [
     {
+      id: 'haldi',
       title: t('invite.haldi'),
-      date: t('invite.date-18'),
+      date: t('invite.haldi-date'),
       when: t('invite.late-afternoon'),
+      venue: t('invite.haldi-venue'),
+      address: '',
       image: WEDDING_CONFIG.art.haldi,
       petal: 'linear-gradient(135deg, #f6d36a, #e08a2f)',
       artworkOnly: true,
@@ -117,24 +156,12 @@ export function IllustratedInvite() {
       lines: [] as string[],
     },
     {
-      title: t('invite.sangeet'),
-      date: t('invite.date-18'),
-      when: t('invite.evening'),
-      image: WEDDING_CONFIG.art.sangeet,
-      petal: 'linear-gradient(135deg, #f7c3d2, #c45c7a)',
-      artworkOnly: false,
-      compact: false,
-      copyTop: '21%',
-      copyLeft: '32%',
-      copyRight: '12%',
-      shades: [],
-      dress: t('invite.sangeet-dress'),
-      lines: [] as string[],
-    },
-    {
+      id: 'vidhi',
       title: t('invite.vidhi'),
       date: t('invite.date-19'),
       when: t('invite.morning'),
+      venue: WEDDING_CONFIG.venue.vidhi.name,
+      address: WEDDING_CONFIG.venue.vidhi.address,
       image: WEDDING_CONFIG.art.vidhi,
       petal: 'linear-gradient(135deg, #f3b0c4, #c44766)',
       artworkOnly: false,
@@ -143,13 +170,17 @@ export function IllustratedInvite() {
       copyLeft: '20%',
       copyRight: '20%',
       shades: [],
+      dressHeading: '',
       dress: t('invite.vidhi-dress'),
       lines: [] as string[],
     },
     {
+      id: 'mangal',
       title: t('invite.mangal'),
       date: t('invite.date-19'),
-      when: t('invite.afternoon'),
+      when: t('invite.mangal-time'),
+      venue: WEDDING_CONFIG.venue.vidhi.name,
+      address: WEDDING_CONFIG.venue.vidhi.address,
       image: WEDDING_CONFIG.art.mangal,
       petal: 'linear-gradient(135deg, #f6d98a, #c69214)',
       artworkOnly: false,
@@ -158,14 +189,36 @@ export function IllustratedInvite() {
       copyLeft: '30%',
       copyRight: '18%',
       shades: [],
+      dressHeading: t('invite.mangal-dress'),
       dress: '',
-      lines: [
-        t('invite.mangal-ladies'),
-        t('invite.mangal-gentlemen'),
-        t('invite.mangal-aunties'),
-      ],
+      lines: [] as string[],
     },
   ];
+  const visibleEvents = events.filter((item) =>
+    eventVariant === 'all'
+      ? true
+      : eventVariant === 'haldi'
+        ? item.id === 'haldi'
+        : item.id !== 'haldi'
+  );
+  const venues = [
+    {
+      ...WEDDING_CONFIG.venue.haldi,
+      id: 'haldi',
+      title: t('invite.venue-haldi-title'),
+      mapUrl: haldiMap,
+    },
+    {
+      ...WEDDING_CONFIG.venue.vidhi,
+      id: 'wedding',
+      title: t('invite.venue-vidhi-title'),
+      mapUrl: vidhiMap,
+    },
+  ];
+
+  useEffect(() => {
+    document.title = couple;
+  }, [couple]);
 
   useEffect(() => {
     let frame = 0;
@@ -278,17 +331,6 @@ export function IllustratedInvite() {
     setPlaying(true);
   };
 
-  const slideGallery = (direction: number) => {
-    const scroller = galleryRef.current;
-
-    if (!scroller) return;
-
-    scroller.scrollBy({
-      left: direction * scroller.clientWidth * 0.82,
-      behavior: 'smooth',
-    });
-  };
-
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setError('');
@@ -366,13 +408,13 @@ export function IllustratedInvite() {
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-[#f7f0e6]" />
           <div className="relative z-10 mt-10">
             <h1 className="font-script text-7xl leading-none text-[#6b2d3c] [text-shadow:0_2px_16px_rgba(255,255,255,0.9)]">
-              {WEDDING_CONFIG.bride.name}
+              {orderedPeople[0].name}
             </h1>
             <p className="font-script mt-1 text-4xl text-[#8a4a3a] [text-shadow:0_2px_12px_rgba(255,255,255,0.85)]">
               {t('invite.weds')}
             </p>
             <h1 className="font-script text-7xl leading-none text-[#6b2d3c] [text-shadow:0_2px_16px_rgba(255,255,255,0.9)]">
-              {WEDDING_CONFIG.groom.name}
+              {orderedPeople[1].name}
             </h1>
           </div>
           <p
@@ -406,42 +448,40 @@ export function IllustratedInvite() {
             {t('invite.invite-lead')}
           </p>
           <p className="mt-2 font-serif text-lg text-[#3d2b22]">
-            {t('invite.families')}
+            {familiesText}
           </p>
-          <p className="mt-5 font-serif text-base italic text-[#8a4a3a]">
-            {t('invite.daughter-of')}
-          </p>
-          <p className="mt-2 whitespace-nowrap font-serif text-[13px] font-bold text-[#3d2b22]">
-            {t('invite.parents-todmal')}
-          </p>
-          <p className="mt-5 font-serif text-base italic text-[#8a4a3a]">
-            {t('invite.son-of')}
-          </p>
-          <p className="mt-2 whitespace-nowrap font-serif text-[13px] font-bold text-[#3d2b22]">
-            {t('invite.parents-thaluri')}
-          </p>
+          {familyDetails.map((family) => (
+            <Fragment key={family.parents}>
+              <p className="mt-5 font-serif text-base italic text-[#8a4a3a]">
+                {family.relationship}
+              </p>
+              <p className="mt-2 whitespace-nowrap font-serif text-[13px] font-bold text-[#3d2b22]">
+                {family.parents}
+              </p>
+            </Fragment>
+          ))}
           <p className="mt-6 font-serif text-lg italic leading-snug text-[#3d2b22]">
-            {t('invite.invite-you')}
+            {invitationLine}
           </p>
           <p className="mt-5 font-serif text-base tracking-wide text-[#8a4a3a]">
-            {t('invite.bride-title')}
+            {orderedPeople[0].title}
           </p>
           <p className="font-script mt-1 text-5xl leading-none text-[#6b2d3c]">
-            {t('invite.bride-name')}
+            {orderedPeople[0].name}
           </p>
           <p className="mt-2 font-serif text-lg italic text-[#8a4a3a]">&</p>
           <p className="mt-1 font-serif text-base tracking-wide text-[#8a4a3a]">
-            {t('invite.groom-title')}
+            {orderedPeople[1].title}
           </p>
           <p className="font-script mt-1 text-5xl leading-none text-[#6b2d3c]">
-            {t('invite.groom-name')}
+            {orderedPeople[1].name}
           </p>
           <div className="mt-8 rounded-3xl border border-[#eadcc4] bg-white/75 px-6 py-8 text-left shadow-sm">
             <p className="font-serif text-2xl italic text-[#6b2d3c]">
               {t('invite.letter-dear')}
             </p>
-            <p className="mt-4 font-serif text-lg leading-relaxed text-[#4d3b32]">
-              {t('invite.letter-body')}
+            <p className="mt-4 whitespace-pre-line font-serif text-lg leading-relaxed text-[#4d3b32]">
+              {invitationLetterBody}
             </p>
             <p className="mt-6 font-serif text-lg italic text-[#6b2d3c]">
               {t('invite.letter-sign')}
@@ -455,7 +495,7 @@ export function IllustratedInvite() {
             {t('invite.events-title')}
           </h2>
           <div className="mt-8 space-y-8">
-            {events.map((item) => (
+            {visibleEvents.map((item) => (
               <article
                 key={item.title}
                 className="relative overflow-hidden rounded-3xl shadow-sm"
@@ -526,10 +566,15 @@ export function IllustratedInvite() {
                     >
                       <path d="M12 2.5c-3.6 0-6.5 2.8-6.5 6.3 0 4.7 6.5 12.7 6.5 12.7s6.5-8 6.5-12.7c0-3.5-2.9-6.3-6.5-6.3zm0 8.6a2.3 2.3 0 1 1 0-4.6 2.3 2.3 0 0 1 0 4.6z" />
                     </svg>
-                    {WEDDING_CONFIG.venue.ceremony.name}
+                    {item.venue}
                   </p>
+                  {item.address ? (
+                    <p className="mx-auto mt-1 max-w-[90%] text-center font-serif text-[11px] leading-tight text-[#3d2b22]">
+                      {item.address}
+                    </p>
+                  ) : null}
                   <p className="mt-1.5 font-serif text-[15px] capitalize text-[#3d2b22]">
-                    {t('invite.dress')}
+                    {item.dressHeading || t('invite.dress')}
                   </p>
                   {item.shades.length > 0 ? (
                     <div className="mx-auto mt-1.5 grid max-w-[15rem] grid-cols-5 gap-1.5">
@@ -556,67 +601,59 @@ export function IllustratedInvite() {
                         </p>
                       ))}
                     </div>
-                  ) : (
+                  ) : item.dress ? (
                     <p className="mt-1 font-serif text-[13px] leading-snug text-[#3d2b22]">
                       {item.dress}
                     </p>
-                  )}
+                  ) : null}
                 </div>
                 )}
               </article>
             ))}
           </div>
-          <div className="mt-8 space-y-8">
-            <div className="overflow-hidden rounded-3xl border border-[#eadcc4] bg-white/70 text-center">
-              <img
-                src={WEDDING_CONFIG.venue.ceremony.photo}
-                alt={WEDDING_CONFIG.venue.ceremony.name}
-                className="h-64 w-full object-cover object-[center_30%]"
-              />
-              <div className="px-5 py-6">
-                <h3 className="font-serif text-2xl text-[#6b2d3c]">
-                  {t('invite.venue-title')}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-[#5c463c]">
-                  {t('invite.venue-text')}
-                </p>
-                <p className="mt-2 text-sm text-[#5c463c]">
-                  {WEDDING_CONFIG.venue.ceremony.name}
-                  <br />
-                  {WEDDING_CONFIG.venue.ceremony.address}
-                </p>
-                <a
-                  href={ceremonyMap}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 inline-block text-sm tracking-wide text-[#8a4a3a] underline decoration-[#e2c48a] underline-offset-4"
-                >
-                  {t('invite.route')}
-                </a>
+          {eventVariant === 'all' ? (
+            <>
+              <h2 className="mt-8 text-center font-serif text-3xl text-[#3d2b22]">
+                {t('invite.venue-title')}
+              </h2>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                {venues.map((venue) => (
+                  <article
+                    key={venue.title}
+                    className="rounded-3xl border border-[#eadcc4] bg-white/70 px-5 py-6 text-center shadow-sm"
+                  >
+                    <h3 className="font-serif text-2xl text-[#6b2d3c]">
+                      {venue.title}
+                    </h3>
+                    <div className="mx-auto mt-3 h-px w-14 bg-[#e2c48a]" />
+                    <p className="mt-3 text-sm text-[#5c463c]">
+                      <span className="font-semibold">
+                        {t('invite.venue-date')}:
+                      </span>{' '}
+                      {venue.date}
+                    </p>
+                    <p className="mt-2 font-serif text-lg font-semibold text-[#3d2b22]">
+                      {venue.name}
+                    </p>
+                    <p className="mt-1 text-sm leading-relaxed text-[#5c463c]">
+                      <span className="font-semibold">
+                        {t('invite.venue-address')}:
+                      </span>{' '}
+                      {venue.address}
+                    </p>
+                    <a
+                      href={venue.mapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-4 inline-block text-sm tracking-wide text-[#8a4a3a] underline decoration-[#e2c48a] underline-offset-4"
+                    >
+                      {t('invite.venue-map-link')}
+                    </a>
+                  </article>
+                ))}
               </div>
-            </div>
-            <div className="rounded-3xl border border-[#eadcc4] bg-white/70 px-5 py-6 text-center">
-              <h3 className="font-serif text-2xl text-[#6b2d3c]">
-                {t('invite.stay-title')}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#5c463c]">
-                {t('invite.stay-text')}
-              </p>
-              <p className="mt-2 text-sm text-[#5c463c]">
-                {WEDDING_CONFIG.venue.reception.name}
-                <br />
-                {WEDDING_CONFIG.venue.reception.address}
-              </p>
-              <a
-                href={stayMap}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-3 inline-block text-sm tracking-wide text-[#8a4a3a] underline decoration-[#e2c48a] underline-offset-4"
-              >
-                {t('invite.route')}
-              </a>
-            </div>
-          </div>
+            </>
+          ) : null}
         </section>
 
         <section className="px-6 pb-14">
@@ -637,8 +674,22 @@ export function IllustratedInvite() {
                 <input
                   required
                   name="name"
+                  maxLength={150}
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  className={`${inputClass} mt-1`}
+                />
+              </label>
+              <label className="block text-sm text-[#5c463c]">
+                {t('invite.phone')}
+                <input
+                  required
+                  type="tel"
+                  name="phone"
+                  autoComplete="tel"
+                  maxLength={32}
+                  value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
                   className={`${inputClass} mt-1`}
                 />
               </label>
@@ -659,10 +710,12 @@ export function IllustratedInvite() {
                 </select>
               </label>
               <label className="block text-sm text-[#5c463c]">
-                {t('invite.extra')}
+                {t('invite.guest-count')}
                 <input
                   type="number"
                   min={0}
+                  max={20}
+                  step={1}
                   name="extraGuests"
                   value={form.extraGuests}
                   onChange={(e) =>
@@ -721,6 +774,18 @@ export function IllustratedInvite() {
                   />
                 </label>
               </div>
+              <label className="block text-sm text-[#5c463c]">
+                {t('invite.message')}
+                <textarea
+                  name="message"
+                  maxLength={2000}
+                  rows={3}
+                  value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  placeholder={t('invite.message-placeholder')}
+                  className={`${inputClass} mt-1 resize-y`}
+                />
+              </label>
               {error ? (
                 <p className="text-sm text-[#8a3030]">{error}</p>
               ) : null}
@@ -738,87 +803,6 @@ export function IllustratedInvite() {
           )}
         </section>
 
-        <section className="px-6 pb-14">
-          <div className="rounded-3xl border border-[#eadcc4] bg-[#fffaf3] px-6 py-8 text-center">
-            <p className="text-[11px] uppercase tracking-[0.28em] text-[#a68456]">
-              {t('invite.gifts-kicker')}
-            </p>
-            <h2 className="mt-2 font-serif text-4xl text-[#6b2d3c]">
-              {t('invite.gifts-title')}
-            </h2>
-            <p className="mt-3 font-serif text-lg leading-relaxed text-[#4d3b32]">
-              {t('invite.gifts-text')}
-            </p>
-          </div>
-        </section>
-
-        <section className="pb-14">
-          <p className="px-6 text-center text-[11px] uppercase tracking-[0.28em] text-[#a68456]">
-            {t('invite.gallery-kicker')}
-          </p>
-          <h2 className="mt-2 px-6 text-center font-serif text-4xl text-[#3d2b22]">
-            {t('invite.gallery-title')}
-          </h2>
-          <div className="mt-6 flex items-center justify-start gap-3 px-6">
-            <button
-              type="button"
-              aria-label={t('invite.previous')}
-              onClick={() => slideGallery(-1)}
-              className="h-10 w-10 rounded-full border border-[#e2c48a] text-lg text-[#8a4a3a]"
-            >
-              ‹
-            </button>
-            <button
-              type="button"
-              aria-label={t('invite.next')}
-              onClick={() => slideGallery(1)}
-              className="h-10 w-10 rounded-full border border-[#e2c48a] text-lg text-[#8a4a3a]"
-            >
-              ›
-            </button>
-          </div>
-          <div
-            ref={galleryRef}
-            className="mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2"
-          >
-            {WEDDING_CONFIG.gallery.map((photo) => (
-              <figure key={photo.src} className="w-[78%] shrink-0 snap-center">
-                <img
-                  src={photo.src}
-                  alt={photo.caption}
-                  className="h-[28rem] w-full rounded-2xl bg-[#f7f0e6] object-contain"
-                />
-                <figcaption className="mt-2 text-center font-serif text-sm text-[#5c463c]">
-                  {photo.caption}
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </section>
-
-        <section className="px-6 pb-8">
-          <p className="text-center text-[11px] uppercase tracking-[0.28em] text-[#a68456]">
-            {t('invite.film-kicker')}
-          </p>
-          <h2 className="mt-2 text-center font-serif text-4xl text-[#3d2b22]">
-            {t('invite.film-title')}
-          </h2>
-          {film ? (
-            <iframe
-              title={t('invite.film-title')}
-              src={film}
-              className="mt-6 aspect-video w-full rounded-3xl"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          ) : (
-            <div className="mt-6 flex aspect-video items-center justify-center rounded-3xl border border-dashed border-[#c6a56a] bg-white/50 px-6 text-center">
-              <p className="font-serif text-lg italic text-[#8a4a3a]">
-                {t('invite.film-soon')}
-              </p>
-            </div>
-          )}
-        </section>
           </div>
         </div>
       </div>

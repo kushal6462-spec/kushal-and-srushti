@@ -45,14 +45,9 @@ export const VenueInformation = ({ venue }: VenueInformationProps) => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-3 shadow-md border border-purple-100"
           >
-            <img
-              src={venue.ceremony.photo}
-              alt={venue.ceremony.name}
-              className="w-full h-16 sm:h-24 object-cover object-[center_30%] rounded-xl mb-2"
-            />
             <div className="text-center mb-2">
               <h3 className="text-sm sm:text-xl font-serif text-gray-800 mb-1">
-                {t('venue.ceremony-time')}
+                {t('invite.venue-haldi-title')}
               </h3>
               <div className="w-16 h-px bg-purple-400 mx-auto"></div>
             </div>
@@ -60,14 +55,14 @@ export const VenueInformation = ({ venue }: VenueInformationProps) => {
             <div className="space-y-6">
               <div className="text-center">
                 <h4 className="text-xs sm:text-lg font-semibold text-gray-800 mb-1 leading-tight">
-                  {venue.ceremony.name}
+                  {venue.haldi.name}
                 </h4>
                 <p className="text-[10px] sm:text-sm text-gray-600 mb-1 leading-snug line-clamp-3">
-                  {venue.ceremony.address}
+                  {venue.haldi.address}
                 </p>
                 <div className="inline-block bg-white/60 rounded-lg px-4 py-2 shadow-sm">
                   <p className="text-purple-700 font-medium text-sm sm:text-base">
-                    📅 {t('venue.ceremony-when')}
+                    📅 {venue.haldi.date}
                   </p>
                 </div>
               </div>
@@ -84,11 +79,11 @@ export const VenueInformation = ({ venue }: VenueInformationProps) => {
                 </div>
               </div>
 
-              {venue.ceremony.mapQuery ? (
+              {venue.haldi.mapQuery ? (
                 <button
                   onClick={() =>
                     window.open(
-                      generateMapLink(venue.ceremony.mapQuery),
+                      generateMapLink(venue.haldi.mapQuery),
                       '_blank'
                     )
                   }
@@ -107,14 +102,9 @@ export const VenueInformation = ({ venue }: VenueInformationProps) => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-3 shadow-md border border-amber-100"
           >
-            <img
-              src={venue.reception.photo}
-              alt={venue.reception.name}
-              className="w-full h-16 sm:h-24 object-cover object-[center_30%] rounded-xl mb-2"
-            />
             <div className="text-center mb-2">
               <h3 className="text-sm sm:text-xl font-serif text-gray-800 mb-1">
-                {t('venue.reception-time')}
+                {t('invite.venue-vidhi-title')}
               </h3>
               <div className="w-16 h-px bg-amber-400 mx-auto"></div>
             </div>
@@ -122,14 +112,14 @@ export const VenueInformation = ({ venue }: VenueInformationProps) => {
             <div className="space-y-6">
               <div className="text-center">
                 <h4 className="text-xs sm:text-lg font-semibold text-gray-800 mb-1 leading-tight">
-                  {venue.reception.name}
+                  {venue.vidhi.name}
                 </h4>
                 <p className="text-[10px] sm:text-sm text-gray-600 mb-1 leading-snug line-clamp-3">
-                  {venue.reception.address}
+                  {venue.vidhi.address}
                 </p>
                 <div className="inline-block bg-white/60 rounded-lg px-4 py-2 shadow-sm">
                   <p className="text-amber-700 font-medium text-sm sm:text-base">
-                    🏨 {t('venue.stay-when')}
+                    📅 {venue.vidhi.date}
                   </p>
                 </div>
               </div>
@@ -146,11 +136,11 @@ export const VenueInformation = ({ venue }: VenueInformationProps) => {
                 </div>
               </div>
 
-              {venue.reception.mapQuery ? (
+              {venue.vidhi.mapQuery ? (
                 <button
                   onClick={() =>
                     window.open(
-                      generateMapLink(venue.reception.mapQuery),
+                      generateMapLink(venue.vidhi.mapQuery),
                       '_blank'
                     )
                   }

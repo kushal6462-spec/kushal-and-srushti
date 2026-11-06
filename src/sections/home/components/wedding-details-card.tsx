@@ -25,10 +25,10 @@ export const WeddingDetailsCard = ({
 
   const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&${new URLSearchParams(
     {
-      text: `${WEDDING_CONFIG.bride.name} & ${WEDDING_CONFIG.groom.name}`,
+      text: `${WEDDING_CONFIG.groom.name} & ${WEDDING_CONFIG.bride.name}`,
       dates: '20261218/20261220',
       details: t('details.join-us'),
-      location: `${venue.ceremony.name}, ${venue.ceremony.address}`,
+      location: `${venue.vidhi.name}, ${venue.vidhi.address}`,
     }
   ).toString()}`;
 
@@ -85,7 +85,7 @@ export const WeddingDetailsCard = ({
               <div className="text-center mb-4">
                 <img
                   src={WEDDING_CONFIG.cover}
-                  alt="Shreya and Narsimha"
+                  alt="Kushal and Srushti"
                   className="w-full max-w-md mx-auto h-80 object-cover object-top rounded-3xl shadow-xl mb-8"
                 />
                 <h3 className="text-2xl sm:text-3xl font-serif text-gray-800 mb-3">
@@ -252,10 +252,10 @@ export const WeddingDetailsCard = ({
             <div className="space-y-4 text-center">
               <div>
                 <h4 className="font-semibold text-gray-800 mb-1 text-sm sm:text-base">
-                  {venue.ceremony.name}
+                  {venue.haldi.name}
                 </h4>
                 <p className="text-gray-600 text-xs sm:text-sm">
-                  {venue.ceremony.address}
+                  {venue.haldi.address}
                 </p>
               </div>
 
@@ -264,13 +264,13 @@ export const WeddingDetailsCard = ({
                   {t('details.when')}
                 </p>
                 <p className="text-purple-600 font-semibold text-sm sm:text-base">
-                  {t('venue.ceremony-when')}
+                  {venue.haldi.date}
                 </p>
               </div>
 
-              {venue.ceremony.mapQuery ? (
+              {venue.haldi.mapQuery ? (
                 <motion.a
-                  href={generateMapLink(venue.ceremony.mapQuery)}
+                  href={generateMapLink(venue.haldi.mapQuery)}
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.05 }}
@@ -296,7 +296,7 @@ export const WeddingDetailsCard = ({
                 <div className="text-4xl">🏨</div>
               </div>
               <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-2">
-                {t('details.reception')}
+                  {t('invite.venue-vidhi-title')}
               </h3>
               <div className="w-16 h-px bg-emerald-400 mx-auto"></div>
             </div>
@@ -304,10 +304,10 @@ export const WeddingDetailsCard = ({
             <div className="space-y-4 text-center">
               <div>
                 <h4 className="font-semibold text-gray-800 mb-1 text-sm sm:text-base">
-                  {venue.reception.name}
+                  {venue.vidhi.name}
                 </h4>
                 <p className="text-gray-600 text-xs sm:text-sm">
-                  {venue.reception.address}
+                  {venue.vidhi.address}
                 </p>
               </div>
 
@@ -316,13 +316,13 @@ export const WeddingDetailsCard = ({
                   {t('details.when')}
                 </p>
                 <p className="text-emerald-600 font-semibold text-sm sm:text-base">
-                  {t('venue.stay-when')}
+                  {venue.vidhi.date}
                 </p>
               </div>
 
-              {venue.reception.mapQuery ? (
+              {venue.vidhi.mapQuery ? (
                 <motion.a
-                  href={generateMapLink(venue.reception.mapQuery)}
+                  href={generateMapLink(venue.vidhi.mapQuery)}
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.05 }}
